@@ -175,7 +175,7 @@ NOTES:
  *   Rating: 1
  */
 int bitOr(int x, int y) {
-  return 2;
+  return ~(~x & ~y);
 }
 /* 
  * evenBits - return word with all even-numbered bits set to 1
@@ -183,8 +183,8 @@ int bitOr(int x, int y) {
  *   Max ops: 8
  *   Rating: 1
  */
-int evenBits(void) {
-  return 2;
+int evenBits(int x) {
+  return (0x55555555 & x);
 }
 /* 
  * minusOne - return a value of -1 
