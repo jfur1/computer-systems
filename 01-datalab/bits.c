@@ -175,6 +175,7 @@ NOTES:
  *   Rating: 1
  */
 int bitOr(int x, int y) {
+  // x or y are true if and only if x and y are not both false (DeMorgan's Law)
   return ~(~x & ~y);
 }
 /* 
@@ -183,8 +184,12 @@ int bitOr(int x, int y) {
  *   Max ops: 8
  *   Rating: 1
  */
-int evenBits(int x) {
-  return (0x55555555 & x);
+int evenBits(void) {
+  int x = 5; // Mask: 0101 0101
+  x = (x << 4) + x;
+  x = (x << 8) + x;
+  x = (x << 16) + x;
+  return x;
 }
 /* 
  * minusOne - return a value of -1 
@@ -192,8 +197,9 @@ int evenBits(int x) {
  *   Max ops: 2
  *   Rating: 1
  */
-int minusOne(void) {
-  return 2;
+int minusOne(int x) {
+  // Flipping 0 gives binary representation: 111...11 which in a 2-complement system is -1.
+  return ~(0);
 }
 /* 
  * allEvenBits - return 1 if all even-numbered bits in word set to 1
@@ -203,7 +209,9 @@ int minusOne(void) {
  *   Rating: 2
  */
 int allEvenBits(int x) {
-  return 2;
+  int mask = (0x55 << 8) + 0x55; // Creates an 8-bit mask with pattern 0101...0101
+  mask = (mask << 16) + mask; // shift by 2 bytes and add again to make it 32 bits long
+  return !((x & mask) ^ mask); // If we Xor 2 identical values, then the even bits are set and we're left with zero (which is flipped to 1 by the bang!)
 }
 /* 
  * anyOddBit - return 1 if any odd-numbered bit in word set to 1
@@ -213,7 +221,10 @@ int allEvenBits(int x) {
  *   Rating: 2
  */
 int anyOddBit(int x) {
-    return 2;
+    int mask = 0xAA; // mask: 1010 1010
+    mask = (mask << 8) ^ mask;
+    mask = (mask << 16) ^ mask;
+    return !!(x & mask);
 }
 /* 
  * byteSwap - swaps the nth byte and the mth byte
